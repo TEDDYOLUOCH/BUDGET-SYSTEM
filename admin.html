@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Budgeting System - Admin Panel</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f4f4f9;
+        }
+        .container {
+            max-width: 800px;
+            width: 100%;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            background-color: white;
+            margin-top: 20px;
+            border-radius: 10px;
+        }
+        h1 {
+            text-align: center;
+        }
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #2d6a4f;
+            color: white;
+            cursor: pointer;
+        }
+        tbody tr:hover {
+            background-color: #f1f1f1;
+        }
+        button {
+            padding: 5px 10px;
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #c0392b;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Admin Panel</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th onclick="sortTransactionsBy('description')">Description</th>
+                    <th onclick="sortTransactionsBy('amount')">Amount</th>
+                    <th onclick="sortTransactionsBy('type')">Type</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="transactionTable">
+                <!-- Transactions will appear here -->
+            </tbody>
+        </table>
+        <button onclick="clearAllTransactions()">Clear All Transactions</button>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Access control
+            const role = localStorage.getItem('role');
+            if (role !== 'admin') {
+                alert('Access denied. Admins only.');
+                window.location.href = 'login.html';
+            }
+            loadTransactions();
+        });
+
+        function loadTransactions() {
+            const transactions = JSON.parse(localStorage.getItem('transactions')) || [];
+            const transactionTable = document.getElementById('transactionTable');
+            transactionTable.innerHTML = "";
+            transactions.forEach((transaction, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${transaction.description}</td>
+                    <td>$${transaction.amount.toFixed(2)}</td>
+                    <td>${transaction.type}</td>
+                    <td><button onclick="deleteTransaction(${index})">Delete</button></td>
+                `;
+                transactionTable.appendChild(row);
+            });
+            if (transactions.length === 0) {
+                transactionTable.innerHTML = `<tr><td colspan="4">No transactions available.</td></tr>`;
+            }
+        }
+
+        function deleteTransaction(index) {
+            if (confirm('Are you sure you want to delete this transaction?')) {
+                const transactions = JSON.parse(localStorage.getItem('transactions')) || [];
+                transactions.splice(index, 1);
+                localStorage.setItem('transactions', JSON.stringify(transactions));
+                loadTransactions();
+            }
+        }
+
+        function clearAllTransactions() {
+            if (confirm('Are you sure you want to clear all transactions?')) {
+                localStorage.removeItem('transactions');
+                loadTransactions();
+            }
+        }
+
+        function sortTransactionsBy(field) {
+            const transactions = JSON.parse(localStorage.getItem('transactions')) || [];
+            transactions.sort((a, b) => {
+                if (field === 'amount') return a.amount - b.amount;
+                return a[field].localeCompare(b[field]);
+            });
+            localStorage.setItem('transactions', JSON.stringify(transactions));
+            loadTransactions();
+        }
+    </script>
+</body>
+</html>

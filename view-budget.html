@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wise Wallet$ - View Budget</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+
+        header {
+            background-color: #2d6a4f;
+            color: white;
+            padding: 10px;
+        }
+
+        header h1 {
+            margin: 0;
+        }
+
+        nav {
+            margin-top: 10px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+
+        nav a.active {
+            text-decoration: underline;
+        }
+
+        main {
+            padding: 20px;
+        }
+
+        .table-section {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background-color: #2d6a4f;
+            color: white;
+        }
+
+        .deleteBtn {
+            padding: 5px 10px;
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .deleteBtn:hover {
+            background-color: #c0392b;
+        }
+
+        .no-permission {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Wise Wallet$ Budget System</h1>
+        <nav>
+            <a href="index.html">Dashboard</a>
+            <a href="add-transaction.html">Add Transaction</a>
+            <a href="view-budget.html" class="active">View Budget</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="table-section">
+            <h2>View Budget</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Description</th>
+                        <th>Amount</th>
+                        <th>Type</th>
+                        <th>Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="transactionTable">
+                    <!-- Budget transactions will be dynamically added here -->
+                </tbody>
+            </table>
+        </section>
+    </main>
+
+    <script>
+        // Retrieve user's role from localStorage
+        const isAdmin = localStorage.getItem('isAdmin') === 'true';
+
+        // Function to load and display transactions
+        function loadTransactions() {
+            const transactionTable = document.getElementById('transactionTable');
+            transactionTable.innerHTML = ''; // Clear table
+
+            // Retrieve transactions from localStorage
+            const transactions = JSON.parse(localStorage.getItem('transactions')) || [];
+
+            // If no transactions, display a message
+            if (transactions.length === 0) {
+                const row = document.createElement('tr');
+                row.innerHTML = '<td colspan="5">No transactions found</td>';
+                transactionTable.appendChild(row);
+                return;
+            }
+
+            // Populate the table with transactions
+            transactions.forEach((transaction, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${transaction.description}</td>
+                    <td>$${transaction.amount.toFixed(2)}</td>
+                    <td>${transaction.type}</td>
+                    <td>${new Date(transaction.date).toLocaleDateString()}</td>
+                    <td>
+                        ${isAdmin 
+                            ? `<button class="deleteBtn" aria-label="Delete transaction" onclick="deleteTransaction(${index})">Delete</button>` 
+                            : '<span class="no-permission">No permission</span>'
+                        }
+                    </td>
+                `;
+                transactionTable.appendChild(row);
+            });
+        }
+
+        // Function to delete a transaction
+        function deleteTransaction(index) {
+            if (isAdmin) {
+                const transactions = JSON.parse(localStorage.getItem('transactions')) || [];
+                transactions.splice(index, 1);
+                localStorage.setItem('transactions', JSON.stringify(transactions));
+                loadTransactions(); // Refresh table
+                alert('Transaction deleted successfully.');
+            } else {
+                alert('You do not have permission to delete transactions.');
+            }
+        }
+
+        // Load transactions on page load
+        window.onload = loadTransactions;
+    </script>
+</body>
+</html>

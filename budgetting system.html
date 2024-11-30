@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Budgeting System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f4f4f9;
+        }
+        .container {
+            max-width: 600px;
+            width: 100%;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            background-color: white;
+            margin-top: 20px;
+            border-radius: 10px;
+        }
+        h1 {
+            text-align: center;
+        }
+        .balance {
+            font-size: 24px;
+            margin: 10px 0;
+            color: #2d6a4f;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        label {
+            font-weight: bold;
+        }
+        input[type="text"], input[type="number"] {
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        .btn {
+            padding: 10px;
+            background-color: #2d6a4f;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .btn:hover {
+            background-color: #1b4332;
+        }
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #2d6a4f;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Budgeting System</h1>
+        <div class="balance">
+            Balance: $<span id="balance">0.00</span>
+        </div>
+
+        <form id="budgetForm">
+            <label for="description">Description:</label>
+            <input type="text" id="description" required>
+
+            <label for="amount">Amount:</label>
+            <input type="number" id="amount" required>
+
+            <label for="type">Type:</label>
+            <select id="type" required>
+                <option value="income">Income</option>
+                <option value="expense">Expense</option>
+            </select>
+
+            <button type="button" class="btn" onclick="addTransaction()">Add Transaction</button>
+        </form>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Description</th>
+                    <th>Amount</th>
+                    <th>Type</th>
+                </tr>
+            </thead>
+            <tbody id="transactionTable">
+                <!-- Transactions will appear here -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        let balance = 0;
+
+        function addTransaction() {
+            const description = document.getElementById('description').value;
+            const amount = parseFloat(document.getElementById('amount').value);
+            const type = document.getElementById('type').value;
+
+            if (type === 'income') {
+                balance += amount;
+            } else {
+                balance -= amount;
+            }
+
+            updateBalance();
+
+            const transactionTable = document.getElementById('transactionTable');
+            const row = document.createElement('tr');
+
+            row.innerHTML = `
+                <td>${description}</td>
+                <td>$${amount.toFixed(2)}</td>
+                <td>${type}</td>
+            `;
+
+            transactionTable.appendChild(row);
+            clearForm();
+        }
+
+        function updateBalance() {
+            document.getElementById('balance').textContent = balance.toFixed(2);
+        }
+
+        function clearForm() {
+            document.getElementById('description').value = '';
+            document.getElementById('amount').value = '';
+            document.getElementById('type').value = 'income';
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,193 @@
+/* ========== Global Styles ========== */
+:root {
+    --primary-color: #4CAF50;
+    --secondary-color: #2196F3;
+    --white-color: #FFFFFF;
+    --text-color: #333;
+    --background-color: #F9F9F9;
+    --hover-transition: 0.3s ease;
+    --max-width: 1200px;
+    --padding: 20px;
+    --border-radius: 8px;
+}
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    color: var(--text-color);
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* ========== Header ========== */
+header {
+    background-color: var(--primary-color);
+    color: var(--white-color);
+    padding: 1.5rem 0;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    width: 100%;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 2rem;
+    line-height: 1.2;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: bold;
+}
+
+/* Navigation */
+nav {
+    margin-top: 1rem;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+nav a {
+    color: var(--white-color);
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    border-bottom: 2px solid transparent;
+    transition: all var(--hover-transition);
+    font-size: 1.2rem;
+    margin: 0 15px;
+}
+
+nav a.active {
+    font-weight: bold;
+    color: #FFD700; /* Golden Yellow for active links */
+    border-bottom: 2px solid var(--white-color);
+}
+
+nav a:hover {
+    color: #CFF09E; /* Light Green hover effect */
+}
+
+/* ========== Main Content ========== */
+main {
+    flex: 1;
+    padding: 2rem;
+    max-width: 900px;
+    margin: auto;
+}
+
+/* ========== Login Form Styles ========== */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: var(--white-color);
+    padding: var(--padding);
+}
+
+.login-container form {
+    background-color: var(--white-color);
+    padding: 2rem;
+    border-radius: var(--border-radius);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+    animation: fade-in 0.5s ease-in-out;
+}
+
+.login-container h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    color: var(--primary-color);
+    text-transform: uppercase;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+    position: relative;
+}
+
+.form-group input[type="text"],
+.form-group input[type="password"],
+.form-group input[type="submit"] {
+    width: 100%;
+    padding: 10px 15px;
+    font-size: 1rem;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: var(--border-radius);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease, border 0.3s ease;
+}
+
+.form-group input[type="text"]:focus,
+.form-group input[type="password"]:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 8px rgba(76, 175, 80, 0.5);
+    outline: none;
+}
+
+.form-group input[type="submit"] {
+    background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+    color: var(--white-color);
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: transform 0.3s ease, background 0.3s ease;
+}
+
+.form-group input[type="submit"]:hover {
+    transform: scale(1.05);
+    background: linear-gradient(45deg, var(--secondary-color), var(--primary-color));
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.form-group input[type="submit"]:active {
+    transform: scale(1);
+    box-shadow: none;
+}
+
+/* Animations */
+@keyframes fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive Adjustments */
+@media (max-width: 600px) {
+    .login-container form {
+        padding: 1.5rem;
+    }
+
+    .login-container h2 {
+        font-size: 1.8rem;
+    }
+}
+
+/* ========== Advanced Components ========== */
+/* Keep previous advanced components here as is */

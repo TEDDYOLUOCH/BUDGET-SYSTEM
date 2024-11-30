@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Section - Budget System</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Welcome to Your Dashboard</h1>
+        <nav>
+            <ul>
+                <li><a href="user-section.html" class="active">Dashboard</a></li>
+                <li><a href="log.html">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="dashboard">
+            <h2>Your Budget Overview</h2>
+            <div class="summary">
+                <div class="summary-item">
+                    <h3>Total Income</h3>
+                    <p>$5000</p>
+                </div>
+                <div class="summary-item">
+                    <h3>Total Expenses</h3>
+                    <p>$2500</p>
+                </div>
+                <div class="summary-item">
+                    <h3>Remaining Balance</h3>
+                    <p>$2500</p>
+                </div>
+            </div>
+
+            <!-- Example for the User to update budget -->
+            <section class="form-section">
+                <h2>Update Your Budget</h2>
+                <form id="budgetForm">
+                    <div class="form-group">
+                        <label for="income">Enter New Income</label>
+                        <input type="number" id="income" placeholder="New Income" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="expenses">Enter New Expenses</label>
+                        <input type="number" id="expenses" placeholder="New Expenses" required>
+                    </div>
+                    <button type="submit" class="btn-submit">Update</button>
+                </form>
+            </section>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Budget System. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Handle budget update form submission
+        document.getElementById('budgetForm').addEventListener('submit', function (event) {
+            event.preventDefault(); // Prevent default form submission
+
+            // Get the new income and expenses values
+            const newIncome = document.getElementById('income').value;
+            const newExpenses = document.getElementById('expenses').value;
+
+            // Update the balance (simple calculation)
+            const newBalance = newIncome - newExpenses;
+
+            // Display the updated values (you can extend this logic to save them in a database or localStorage)
+            alert(`Your new balance is: $${newBalance}`);
+        });
+    </script>
+</body>
+</html>

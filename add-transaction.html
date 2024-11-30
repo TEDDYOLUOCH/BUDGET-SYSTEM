@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Transaction - Budget System</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #2d6a4f;
+            padding: 10px;
+            color: white;
+        }
+
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            justify-content: space-around;
+        }
+
+        nav ul li {
+            margin: 0 10px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+        }
+
+        nav ul li a.active {
+            text-decoration: underline;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 400px;
+        }
+
+        .close {
+            float: right;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        button[type="submit"] {
+            background-color: #2d6a4f;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #3b8d70;
+        }
+
+        #transactionsList {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        #transactionsList li {
+            padding: 5px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .transaction-type-income {
+            color: green;
+        }
+
+        .transaction-type-expense {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Budget System</h1>
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="add-transaction.html" class="active">Add Transaction</a></li>
+            <li><a href="log.html">Logout</a></li>
+        </ul>
+    </nav>
+</header>
+
+<main>
+    <!-- Button to Open the Modal -->
+    <button id="addTransactionBtn">Add Transaction</button>
+
+    <!-- The Modal -->
+    <div id="addTransactionModal" class="modal">
+        <div class="modal-content">
+            <span id="closeModal" class="close">&times;</span>
+            <h2>Add New Transaction</h2>
+            <form id="addTransactionForm">
+                <label for="transactionType">Type</label>
+                <select id="transactionType" required>
+                    <option value="income">Income</option>
+                    <option value="expense">Expense</option>
+                </select>
+
+                <label for="amount">Amount</label>
+                <input type="number" id="amount" required min="0.01" step="0.01" placeholder="Enter amount" />
+
+                <label for="description">Description</label>
+                <input type="text" id="description" required placeholder="Enter description" />
+
+                <button type="submit">Add Transaction</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Transactions List Section -->
+    <section>
+        <h2>Transaction List</h2>
+        <ul id="transactionsList"></ul>
+    </section>
+</main>
+
+<footer>
+    <p>&copy; 2024 Budget System | All Rights Reserved</p>
+</footer>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const modal = document.getElementById("addTransactionModal");
+        const openBtn = document.getElementById("addTransactionBtn");
+        const closeBtn = document.getElementById("closeModal");
+        const transactionsList = document.getElementById("transactionsList");
+
+        openBtn.onclick = () => (modal.style.display = "flex");
+        closeBtn.onclick = () => (modal.style.display = "none");
+        window.onclick = (e) => {
+            if (e.target === modal) modal.style.display = "none";
+        };
+
+        const renderTransaction = (transaction) => {
+            const item = document.createElement("li");
+            item.className = `transaction-type-${transaction.type}`;
+            item.textContent = `${transaction.type.toUpperCase()} - $${transaction.amount.toFixed(2)}: ${transaction.description}`;
+            transactionsList.appendChild(item);
+        };
+
+        const loadTransactions = () => {
+            const transactions = JSON.parse(localStorage.getItem("transactions")) || [];
+            transactionsList.innerHTML = ""; // Clear existing list
+            transactions.forEach(renderTransaction);
+        };
+
+        document.getElementById("addTransactionForm").addEventListener("submit", (e) => {
+            e.preventDefault();
+
+            const type = document.getElementById("transactionType").value;
+            const amount = parseFloat(document.getElementById("amount").value);
+            const description = document.getElementById("description").value.trim();
+
+            if (isNaN(amount) || amount <= 0 || !description) {
+                alert("Please provide valid inputs.");
+                return;
+            }
+
+            const transaction = { type, amount, description, date: new Date().toISOString() };
+            const transactions = JSON.parse(localStorage.getItem("transactions")) || [];
+            transactions.push(transaction);
+            localStorage.setItem("transactions", JSON.stringify(transactions));
+
+            renderTransaction(transaction);
+            alert("Transaction added successfully!");
+            modal.style.display = "none";
+            document.getElementById("addTransactionForm").reset();
+        });
+
+        loadTransactions();
+    });
+</script>
+
+</body>
+</html>
